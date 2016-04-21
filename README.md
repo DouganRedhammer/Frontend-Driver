@@ -47,7 +47,7 @@ $ frontend-driver build --env=dev
 ````
 Runs grunt dev on all frontend project directories located within the path specified.
 ````javascript
-$ frontend-driver build --env=dev --path=C:\\projects\\epic\FrontEnd\\   
+$ frontend-driver build --env=dev --path=C:\\projects\\web\FrontEnd\\   
 ````
 ## Options
 
