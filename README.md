@@ -1,6 +1,5 @@
 # Frontend-Driver
-A node utility to facilitate installing dependancies and building multiple frontend projects.
-
+A node utility to facilitate installing dependancies and building multiple frontend projects.  
 Walks through all directories in the project directory. Frontend-driver must be called from the project root directory, in this case projects/
 ```
 projects
@@ -8,17 +7,17 @@ projects
 └───Project1
     │  bower.json
     │  Guntfile.js
-    │  package.jsonG
+    │  package.json
     │  src
 └───Project2
     │  bower.json
     │  Guntfile.js
-    │  package.jsonG
+    │  package.json
     │  src
 └───Project3
     │  bower.json
     │  Guntfile.js
-    │  package.jsonG
+    │  package.json
     │  src
 ```
 
@@ -30,13 +29,19 @@ projects
 
 ## Installation
 
-npm install -g
+npm install -g frontend-driver
 
 ## Usage
  Runs npm install on all frontend projects.
 ````javascript
 $ frontend-driver install 
 ````
+
+ Runs npm install and bower install on all frontend projects.
+````javascript
+$ frontend-driver install --node --bower
+````
+
  Runs npm install on all frontend project directories located within the path specified.
 ````javascript
 $ frontend-driver install --path=C:\projects\web\FrontEnd\  
@@ -49,17 +54,31 @@ Runs grunt dev on all frontend project directories located within the path speci
 ````javascript
 $ frontend-driver build --env=dev --path=C:\\projects\\web\FrontEnd\\   
 ````
+
+Runs grunt dev \-\-force on all frontend project directories and labels the output with the directory name.
+````javascript
+$ frontend-driver build --env=dev -l -f
+````
+
 ## Options
 
---path
-
+**\-\-path**  
 (Optional) Path to the Frontend directory
 
-
---env
-
-
+**\-\-env [string]**  
 Build environment. (The grunt task to run)
+
+**\-\-node [boolean] [default: true]** (Optional)  
+Install node modules. Install only.
+                                                       
+**\-\-bower [boolean] [default: true]** (Optional)  
+Install bower components. Install only.
+                                                       
+**-l, \-\-label [boolean] [default: true]** (Optional)  
+Label output with the folder name.
+                                                       
+**-f, \-\-force [boolean] [default: true]** (Optional)  
+Adds the force command to all Grunt tasks. Build only.
 
 ## License
 
