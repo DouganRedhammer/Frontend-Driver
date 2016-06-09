@@ -42,6 +42,11 @@ $ frontend-driver install
 $ frontend-driver install --node --bower
 ````
 
+ Runs npm install and bower install on all frontend projects synchronously.
+````javascript
+$ frontend-driver install --node --bower -s
+````
+
  Runs npm install on all frontend project directories located within the path specified.
 ````javascript
 $ frontend-driver install --path=C:\projects\web\FrontEnd\  
@@ -58,6 +63,11 @@ $ frontend-driver build --env=dev --path=C:\\projects\\web\FrontEnd\\
 Runs grunt dev \-\-force on all frontend project directories and labels the output with the directory name.
 ````javascript
 $ frontend-driver build --env=dev -l -f
+````
+
+Runs grunt dev \-\-force synchronously on all frontend project directories.
+````javascript
+$ frontend-driver build --env=dev -f -s 
 ````
 
 ## Options

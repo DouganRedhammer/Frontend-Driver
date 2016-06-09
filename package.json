@@ -1,7 +1,7 @@
 {
   "name": "frontend-driver",
   "author": "Daniel Franklin",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "A driver for multiple frontend projects with individual gruntfiles and package.json.",
   "repository": {
     "type": "git",
