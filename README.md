@@ -1,5 +1,5 @@
 # Frontend-Driver
-A node utility to facilitate installing dependancies and building multiple frontend projects.  
+A node utility to facilitate installing dependencies and building multiple frontend projects.  
 Walks through all directories in the project directory. Frontend-driver must be called from the project root directory, in this case projects/
 ```
 projects
