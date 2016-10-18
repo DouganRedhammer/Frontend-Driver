@@ -237,11 +237,11 @@ function Build(env) {
 							  if(yargs.argv.force || yargs.argv.f){
 								  forceGrunt = " --force"
 							  }
-							 
-                              var gruntBuild = exec('grunt ' + env + forceGrunt, {
-                                   cwd: shell.pwd() + "/" + result + "/"
-                              });
 
+			if (shell.exec('grunt ' + env + forceGrunt , {silent:false}).code !== 0) {
+			  console.log('Error: '+ entry +' failed!');
+			  process.exit(1);
+			}
 							  var label = "";
 							  if(yargs.argv.label || yargs.argv.l){
 								  label = result + ": ";
@@ -260,7 +260,7 @@ function Build(env) {
 
 function BuildSync(env) {
      var projectList = [];
-     var files = fs.readdirSync("./");
+     var files = fs.readdirSync("./"); 
           for (var i in files) {
                if (fs.statSync(files[i]).isDirectory()) {
                     if(HasConfigFile(files[i], "Gruntfile.js")){
@@ -276,6 +276,9 @@ function BuildSync(env) {
 			forceGrunt = " --force"
 	    }
 		shell.cd(scriptDirectory + "\\" + entry + "\\")
-		var gruntBuild = shell.exec('grunt ' + env + forceGrunt , {silent:false}).stdout;
+			if (shell.exec('grunt ' + env + forceGrunt , {silent:false}).code !== 0) {
+			  console.log('Error: '+ entry +' failed!');
+			  process.exit(1);
+			}
      })          
 };
