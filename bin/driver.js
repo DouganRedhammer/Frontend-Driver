@@ -140,7 +140,7 @@ function InstallNodeModules() {
      var deferral = q.defer();
      fs.readdir("./", function (err, items) {
           for (var i = 0; i < items.length; i++) {
-               if (fs.statSync(items[i]).isDirectory()) {
+			   if (fs.statSync(items[i]).isDirectory()) {
                     q.when(HasConfigFile(items[i], "package.json")).then(function (result) {
                          if (result) {
                               var npmInstall = exec('npm install', {
@@ -168,7 +168,7 @@ function InstallNodeModulesSync() {
      var files = fs.readdirSync("./");
           for (var i in files) {
                if (fs.statSync(files[i]).isDirectory()) {
-                    if(HasConfigFile(files[i], "package.json")){
+                    if(fs.existsSync(files[i]+'/package.json')){
                          projectList.push(files[i]);
                     }
                }
@@ -178,7 +178,7 @@ function InstallNodeModulesSync() {
 		console.log("Installing Npm modules for " + entry);
 		shell.cd(scriptDirectory + "\\" + entry + "\\")
 		var npmInstall = shell.exec('npm install ', {silent:false}).stdout;
-     }) 
+     }); 
 }
 
 function InstallBowerComponents() {
@@ -212,7 +212,7 @@ function InstallBowerComponentsSync() {
      var files = fs.readdirSync("./");
           for (var i in files) {
                if (fs.statSync(files[i]).isDirectory()) {
-                    if(HasConfigFile(files[i], "bower.json")){
+                    if(fs.existsSync(files[i]+'/bower.json')){
                          projectList.push(files[i]);
                     }
                }
@@ -222,34 +222,29 @@ function InstallBowerComponentsSync() {
 		console.log("Installing bower components for " + entry);
 		shell.cd(scriptDirectory + "\\" + entry + "\\")
 		var npmInstall = shell.exec('bower install ', {silent:false}).stdout;
-     }) 
+     }); 
 }
 
 function Build(env) {
      var deferral = q.defer();
+	 var scriptDirectory  = shell.pwd();
      fs.readdir("./", function (err, items) {
           for (var i = 0; i < items.length; i++) {
                if (fs.statSync(items[i]).isDirectory()) {
                     q.when(HasConfigFile(items[i], "Gruntfile.js")).then(function (result) {
                          if (result) {
-							 
-							  var forceGrunt = "";
-							  if(yargs.argv.force || yargs.argv.f){
-								  forceGrunt = " --force"
-							  }
-
-			if (shell.exec('grunt ' + env + forceGrunt , {silent:false}).code !== 0) {
-			  console.log('Error: '+ entry +' failed!');
-			  process.exit(1);
-			}
-							  var label = "";
-							  if(yargs.argv.label || yargs.argv.l){
-								  label = result + ": ";
-							  }
-							  
-                              gruntBuild.stdout.on('data', function (data) {
-                                   console.log(label + data);
-                              });
+							var forceGrunt = "";
+							if(yargs.argv.force || yargs.argv.f){
+								forceGrunt = " --force"
+							}
+							shell.cd(scriptDirectory + "\\" + result + "\\")
+							if (shell.exec('grunt ' + env + forceGrunt , {silent:false}).code !== 0) {
+								if(!yargs.argv.force || !yargs.argv.f){
+								  console.log('Error: '+ entry +' failed!');
+								  process.exit(1);
+								  return false;
+								}
+							}
                          }
                     });
                }
@@ -263,22 +258,25 @@ function BuildSync(env) {
      var files = fs.readdirSync("./"); 
           for (var i in files) {
                if (fs.statSync(files[i]).isDirectory()) {
-                    if(HasConfigFile(files[i], "Gruntfile.js")){
+                    if(fs.existsSync(files[i]+'/Gruntfile.js')){
                          projectList.push(files[i]);
                     }
                }
           }
 	 var scriptDirectory  = shell.pwd();
      projectList.forEach(function(entry) {
-		console.log("Building " + entry);
-		var forceGrunt = "";
-		if(yargs.argv.force || yargs.argv.f){
+		 console.log("Building " + entry);
+		 var forceGrunt = "";
+		 if(yargs.argv.force || yargs.argv.f){
 			forceGrunt = " --force"
-	    }
-		shell.cd(scriptDirectory + "\\" + entry + "\\")
-			if (shell.exec('grunt ' + env + forceGrunt , {silent:false}).code !== 0) {
-			  console.log('Error: '+ entry +' failed!');
-			  process.exit(1);
+		 }
+		 shell.cd(scriptDirectory + "\\" + entry + "\\")
+		 if (shell.exec('grunt ' + env + forceGrunt , {silent:false}).code !== 0) {
+			if(!yargs.argv.force || !yargs.argv.f){
+				console.log('Error: '+ entry +' failed!');
+				process.exit(1);
+				return false;
 			}
-     })          
+		}
+     });          
 };
